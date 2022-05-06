@@ -57,7 +57,9 @@ OPTIONS:
 
     -h  | --help                                获取使用方法
 ```
-## Commands the scriptd use ｜ 脚本所用命令
+## Commands the script use ｜ 脚本所用命令
+If the script can't run correctly, you can try install directly by yourself  
+如果脚本无法正常运行，你可以尝试自己直接安装
 ```
 pkg install python3
 curl https://bootstrap.pypa.io/get-pip.py > get-pip.py
