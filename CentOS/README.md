@@ -1,1 +1,1 @@
-# CentOS 8 Repository
+# CentOS 8 repository configuration files
