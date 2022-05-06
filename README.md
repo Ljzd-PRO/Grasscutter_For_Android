@@ -5,12 +5,16 @@ Install Grasscutter on Android without ROOT
 [🔗Grasscutter](https://github.com/Grasscutters/Grasscutter) ｜ [🔗mitmproxy](https://github.com/mitmproxy/mitmproxy) ｜ [🔗MongoDB](https://www.mongodb.com) ｜ [🔗Termux](https://github.com/termux/termux-app) ｜ [🔗Anlinux](https://github.com/EXALAB/Anlinux-Resources)
 
 ## Usage | 使用方法
-* 1. Download the installer script.  
+* 1. Install Termux App to your Android device.  
+  安装 Termux App 到你的安卓设备.  
+[**🔗Termux App**](https://github.com/termux/termux-app/releases)
+
+* 2. Download the installer script.  
   下载安装脚本
 ```
 curl https://raw.githubusercontent.com/Ljzd-PRO/Grasscutter_For_Android/main/grasscutter_installer.sh > grasscutter_installer.sh
 ```
-* 2. Run the installer script.  
+* 3. Run the installer script.  
   运行安装脚本
 ```
 bash grasscutter_installer.sh [OPTIONS 选项] [VALUES 值]
