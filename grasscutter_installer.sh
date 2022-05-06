@@ -12,9 +12,9 @@ USAGE:
     ./$(basename  $0) [OPTIONS] [VALUES]
 
 OPTIONS:
-    -i  | --install [mitmproxy|mongodb|all]      Start to install Grasscutter with environment you choose (Default: all)
+    -i  | --install [mitmproxy|mongodb|all]     Start to install Grasscutter with environment you choose (Default: all)
             mitmproxy                           Install mitmproxy with Python3 PyPi (mitmproxy redirects MiHoYo's URL to your server)
-            mongodb                             Install MongoDB with CentOS 8 by AnLinux(https://github.com/EXALAB/AnLinux-App) (Grasscutter require MongoDB database)
+            mongodb                             Install MongoDB with CentOS 8 by Anlinux(https://github.com/EXALAB/AnLinux-App) (Grasscutter require MongoDB database)
             all                                 Install both mitmproxy and MongoDB
     -c  | --check [mitmproxy|mongodb|jdk|all]   Check if you have installed mitmproxy, MongoDB or JDK17 (Default: all)
 
@@ -122,8 +122,8 @@ install() {
     local check_result_jdk
     local check_result_proot
 
-    local jar-file=""
-    local target-path="./grasscutter"
+    local jar_file=""
+    local target_path="./grasscutter"
 
     # Get values set for installation
     num=0
@@ -131,14 +131,14 @@ install() {
 
             let num++
 
-            if "$arg" in "-j" "--jar-file"; then
+            if [ $arg = "-j" ] || [ $arg = "--jar-file" ]; then
                 if [ ${#args[@]} != $num ] && [ ${args[num]:0:1} != "-" ]; then
-                    local jar-file=${args[num]}
+                    local jar_file=${args[num]}
                 fi
             else
-                if "$arg" in "-t" "--target"; then
+                if [ $arg = "-t" ] || [ $arg = "--target-path" ]; then
                     if [ ${#args[@]} != $num ] && [ ${args[num]:0:1} != "-" ]; then
-                        local target-path=${args[num]}
+                        local target_path=${args[num]}
                     fi
                 fi
             fi
@@ -148,10 +148,10 @@ install() {
     # Install mitmproxy
     if [ $1 = "mitmproxy" -o $1 = "all" ]; then
         checkEnvironment "mitmproxy"
-        if [ $check_result_mitmproxy != 1 ]; then
+        if [[ $check_result_mitmproxy != 1 ]]; then
             echo "> Installing mitmproxy ..."
-            if [ $check_result_pip != 1 ]; then
-                if [ $check_result_python3 != 1 ]; then
+            if [[ $check_result_pip != 1 ]]; then
+                if [[ $check_result_python3 != 1 ]]; then
                     exec "pkg install python3"
                 fi
                 exec "curl https://bootstrap.pypa.io/get-pip.py > get-pip.py"
@@ -167,51 +167,53 @@ install() {
     # Install MongoDB
     if [ $1 = "mongodb" -o $1 = "all" ]; then
         checkEnvironment "mongodb"
-        if [ $check_result_mongodb != 1 ] && [ $1 = "mongodb" -o $1 = "all" ]; then
-            echo "> Installing MongoDB ..."
-            exec "pkg install openssl-tool"
-            if [ $check_result_proot != 1 ]; then
-                exec "pkg install proot"
+        if [[ $check_result_mongodb != 1 ]]; then
+            if [ $1 = "mongodb" ] || [ $1 = "all" ]; then
+                echo "> Installing MongoDB ..."
+                exec "pkg install openssl-tool"
+                if [[ $check_result_proot != 1 ]]; then
+                    exec "pkg install proot"
+                fi
+                exec "curl https://raw.githubusercontent.com/EXALAB/Anlinux-Resources/master/Scripts/Installer/CentOS/centos.sh > centos_installer.sh"
+                exec "bash centos_installer.sh"
+                exec "rm centos_installer.sh"
+                exec "bash ~/start-centos.sh curl https://raw.githubusercontent.com/Ljzd-PRO/Grasscutter_For_Android/main/CentOS/CentOS-Linux-BaseOS.repo -o /etc/yum.repos.d/CentOS-Linux-BaseOS.repo"
+                exec "bash ~/start-centos.sh curl https://raw.githubusercontent.com/Ljzd-PRO/Grasscutter_For_Android/main/CentOS/CentOS-Linux-AppStream.repo -o /etc/yum.repos.d/CentOS-Linux-AppStream.repo"
+                exec "bash ~/start-centos.sh curl https://repo.mongodb.org/yum/redhat/8/mongodb-org/5.0/aarch64/RPMS/mongodb-org-server-5.0.8-1.el8.aarch64.rpm > mongodb_installer.rpm"
+                exec "bash ~/start-centos.sh yum clean all && yum makecache"
+                exec "bash ~/start-centos.sh yum install mongodb_installer.rpm"
+                echo -e "  \033[32m[v] MongoDB successfully installed\033[0m"
             fi
-            exec "curl https://raw.githubusercontent.com/EXALAB/Anlinux-Resources/master/Scripts/Installer/CentOS/centos.sh > centos_installer.sh"
-            exec "bash centos_installer.sh"
-            exec "rm centos_installer.sh"
-            exec "bash ~/start-centos.sh curl https://raw.githubusercontent.com/Ljzd-PRO/Grasscutter_For_Android/main/CentOS/CentOS-Linux-BaseOS.repo -o /etc/yum.repos.d/CentOS-Linux-BaseOS.repo"
-            exec "bash ~/start-centos.sh curl https://raw.githubusercontent.com/Ljzd-PRO/Grasscutter_For_Android/main/CentOS/CentOS-Linux-AppStream.repo -o /etc/yum.repos.d/CentOS-Linux-AppStream.repo"
-            exec "bash ~/start-centos.sh curl https://repo.mongodb.org/yum/redhat/8/mongodb-org/5.0/aarch64/RPMS/mongodb-org-server-5.0.8-1.el8.aarch64.rpm > mongodb_installer.rpm"
-            exec "bash ~/start-centos.sh yum clean all && yum makecache"
-            exec "bash ~/start-centos.sh yum install mongodb_installer.rpm"
-            echo -e "  \033[32m[v] MongoDB successfully installed\033[0m"
         fi
     fi
 
     # Install JDK17
     checkEnvironment "jdk"
-    if [ $check_result_jdk != 1 ]; then
+    if [[ $check_result_jdk != 1 ]]; then
         echo "> Installing JDK17 ..."
         exec "pkg install openjdk-17"
         echo -e "  \033[32m[v] JDK17 successfully installed\033[0m"
     fi
 
     # Install Grasscutter
-    if [ -z $jar-file ]; then
+    if [ -z $jar_file ]; then
         release_url=$(curl -Ls -w %{url_effective} -o /dev/null https://github.com/Grasscutters/Grasscutter/releases/latest)
         split_url=(${release_url//// })
         latest_download="https://github.com/Grasscutters/Grasscutter/releases/download/${split_url[${#split_url[@]}-1]}/grasscutter.jar"
-        if [ ${target-path} != "./grasscutter" ]; then
-            if [ ${target-path: -1} = "/" ]; then
-                exec "curl ${latest_download} > ${target-path}'grasscutter.jar'"
+        if [ ${target_path} != "./grasscutter" ]; then
+            if [ ${target_path: -1} = "/" ]; then
+                exec "curl ${latest_download} > ${target_path}'grasscutter.jar'"
             else
-                exec "curl ${latest_download} > ${target-path}'/grasscutter.jar'"
+                exec "curl ${latest_download} > ${target_path}'/grasscutter.jar'"
             fi
         fi
     else
-        if [ ${target-path} != "./grasscutter" ]; then
-            if [ -d ${target-path} ]; then
-                exec "cp ${jar-file} ${target-path}"
+        if [ ${target_path} != "./grasscutter" ]; then
+            if [ -d ${target_path} ]; then
+                exec "cp ${jar_file} ${target_path}"
             else
-                exec "mkdir ${target-path}"
-                exec "cp ${jar-file} ${target-path}"
+                exec "mkdir ${target_path}"
+                exec "cp ${jar_file} ${target_path}"
             fi
         fi
     fi
