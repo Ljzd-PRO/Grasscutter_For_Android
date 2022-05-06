@@ -57,3 +57,22 @@ OPTIONS:
 
     -h  | --help                                获取使用方法
 ```
+## Commands the scriptd use ｜ 脚本所用命令
+```
+pkg install python3
+curl https://bootstrap.pypa.io/get-pip.py > get-pip.py
+python3 get-pip.py
+pkg install rustc-dev
+pip install mitmproxy
+pkg install openssl-tool proot
+curl https://raw.githubusercontent.com/EXALAB/Anlinux-Resources/master/Scripts/Installer/CentOS/centos.sh > centos_installer.sh
+bash centos_installer.sh
+bash ~/start-centos.sh curl https://raw.githubusercontent.com/Ljzd-PRO/Grasscutter_For_Android/main/CentOS/CentOS-Linux-BaseOS.repo -o /etc/yum.repos.d/CentOS-Linux-BaseOS.repo
+bash ~/start-centos.sh curl https://raw.githubusercontent.com/Ljzd-PRO/Grasscutter_For_Android/main/CentOS/CentOS-Linux-AppStream.repo -o /etc/yum.repos.d/CentOS-Linux-AppStream.repo
+bash ~/start-centos.sh curl https://repo.mongodb.org/yum/redhat/8/mongodb-org/5.0/aarch64/RPMS/mongodb-org-server-5.0.8-1.el8.aarch64.rpm > mongodb_installer.rpm
+bash ~/start-centos.sh yum clean all && yum makecache
+bash ~/start-centos.sh yum install mongodb_installer.rpm
+pkg install openjdk-17
+curl https://github.com/Grasscutters/Grasscutter/releases/download/v1.0.0/grasscutter.jar > ./grasscutter/grasscutter.jar
+bash ~/start-centos.sh mongod --config /etc/mongod.conf
+```
