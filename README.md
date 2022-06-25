@@ -11,12 +11,12 @@ Install Grasscutter on Android without ROOT
 
 * 2. Download the installer script.  
   下载安装脚本
-```
+```shell
 curl https://raw.githubusercontent.com/Ljzd-PRO/Grasscutter_For_Android/main/grasscutter_installer.sh > grasscutter_installer.sh
 ```
 * 3. Run the installer script.  
   运行安装脚本
-```
+```shell
 bash grasscutter_installer.sh [OPTIONS 选项] [VALUES 值]
 ```
 * * *
@@ -60,7 +60,7 @@ OPTIONS:
 ## Commands the script use ｜ 脚本所用命令
 If the script can't run correctly, you can try install directly by yourself  
 如果脚本无法正常运行，你可以尝试自己直接安装
-```
+```shell
 pkg install python3
 curl https://bootstrap.pypa.io/get-pip.py > get-pip.py
 python3 get-pip.py
